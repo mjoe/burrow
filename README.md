@@ -1,48 +1,56 @@
+<div align="center">
+
 # Burrow
 
-SSH Tunnel Management - Made Easy
+**SSH Tunnel Management · Made Easy**
 
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-[![Java](https://img.shields.io/badge/java-25+-blue.svg)](https://adoptium.net/)
-[![Maven](https://img.shields.io/badge/maven-3.9+-green.svg)](https://maven.apache.org/)
+[![License](https://img.shields.io/badge/license-Apache%202.0-informational.svg)](LICENSE)
+[![Java](https://img.shields.io/badge/java-25-blue.svg?logo=openjdk&logoColor=white)](https://adoptium.net/)
+[![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 
-A modern SSH tunnel management tool with a clean Swing GUI.
+A modern, secure SSH tunnel manager with a clean Swing GUI.
+
+Build, manage and auto-reconnect local, remote and dynamic port forwarding
+tunnels through an intuitive desktop interface.
+
+</div>
+
+---
 
 ## Features
 
-- **SSH Tunnel Management**: Create, edit, and delete SSH tunnels
-- **Port Forwarding**: Support for local, remote, and dynamic (SOCKS) forwarding
-- **Auto-Reconnect**: Automatic reconnection with exponential backoff
-- **Modern GUI**: Clean Swing interface with FlatLaf theming
-- **YAML Configuration**: Simple, human-readable configuration files
-- **Secure Password Storage**: AES-GCM encryption with a persisted key file
+| Feature                        | Description                                                     |
+| ------------------------------ | --------------------------------------------------------------- |
+| **Port Forwarding**            | Local, remote and dynamic (SOCKS) tunneling                      |
+| **Auto-Reconnect**             | Resilient reconnection with exponential backoff                  |
+| **Secure Credentials**         | AES-GCM encryption with a persisted, owner-only key file         |
+| **YAML Configuration**         | Human-readable, declarative config                              |
+| **Modern GUI**                 | FlatLaf theming with dark & light modes                          |
+| **Identity Management**        | Reusable SSH identities with password or key authentication      |
 
-## Requirements
-
-- **Java 25 or later**: [Download Eclipse Temurin](https://adoptium.net/)
-- **Maven 3.9 or later**: [Download Apache Maven](https://maven.apache.org/download.cgi) (for building)
-
-## Building
+## Quick Start
 
 ```bash
-# Clone the repository
+# 1. Clone
 git clone https://github.com/mjoe/burrow.git
 cd burrow
 
-# Build the project
+# 2. Build
 mvn clean package
 
-# Run the application
+# 3. Run
 java -jar burrow-gui/target/burrow-gui-<version>.jar
 ```
 
+### Requirements
+
+- **Java 25+** — [Eclipse Temurin](https://adoptium.net/)
+- **Maven 3.9+** — [Apache Maven](https://maven.apache.org/download.cgi)
+
 ## Configuration
 
-By default, Burrow reads its configuration from `~/.burrow/config.yaml`. You can also load a config file via the GUI (`File → Load Configuration`).
-
-The SSH encryption key used for password storage is persisted at `~/.burrow/secret.key` with owner-only permissions. Do not share this file - without it, stored passwords cannot be decrypted.
-
-### Configuration Structure
+Burrow reads its configuration from `~/.burrow/config.yaml`. You can also
+load a file at runtime via the GUI (`File → Load Configuration`).
 
 ```yaml
 identities:
@@ -71,50 +79,49 @@ forwards:
     remotePort: 80
 ```
 
+> **Note:** Stored passwords are encrypted with an AES key persisted at
+> `~/.burrow/secret.key` (owner-only permissions). Never share this file —
+> without it, stored passwords cannot be decrypted.
+
 ## Architecture
 
-Burrow is organized as a multi-module Maven project:
+Burrow is a multi-module Maven project:
 
-- **burrow-core**: Core library with SSH logic, configuration, domain models, and security
-- **burrow-gui**: Swing GUI application
+| Module        | Responsibility                                        |
+| ------------- | ----------------------------------------------------- |
+| `burrow-core` | Domain models, SSH logic, configuration, security     |
+| `burrow-gui`  | Swing desktop application                             |
 
-### Key Improvements Over jentunnel
+**Design principles:**
 
-1. **Modern Java**: Uses Java 25 features (records, sealed classes, pattern matching)
-2. **Clean Architecture**: Separated core logic from GUI
-3. **Type-Safe Models**: Immutable records with builder pattern
-4. **Secure Credentials**: AES-GCM encryption instead of obfuscation
-5. **Persisted Encryption Key**: Key stored in a separate owner-only file, never hardcoded
-6. **Comprehensive Tests**: Unit tests for core functionality
-7. **Modern Dependencies**: Up-to-date libraries (SSH, crypto, GUI)
+- Immutable records with builder patterns for type-safe models
+- Sealed hierarchies for well-defined port-forwarding types
+- Core logic cleanly separated from the GUI layer
+- Secure credentials by default, never hardcoded keys
 
 ## Development
 
-### Prerequisites
-
-- JDK 25+ (Eclipse Temurin recommended)
-- Maven 3.9+
-
-### Running Tests
+### Run tests
 
 ```bash
 mvn test
 ```
 
-### IDE Setup
+### IDE setup
 
-Import as a Maven project. Recommended IDEs:
-- IntelliJ IDEA
+Import as a Maven project. Recommended:
+
+- [IntelliJ IDEA](https://www.jetbrains.com/idea/)
 - Eclipse with Maven plugin
-- VS Code with Java extensions
+- [VS Code](https://code.visualstudio.com/) with Java extensions
 
 ## License
 
-Apache License, Version 2.0 - see [LICENSE](LICENSE) for details.
+[Apache License, Version 2.0](LICENSE)
 
 ## Credits
 
 - Original project: [jentunnel](https://github.com/ggrandes/jentunnel) by ggrandes
-- SSH library: [Apache Mina SSHD](https://github.com/apache/mina-sshd/)
-- GUI theming: [FlatLaf](https://www.formdev.com/flatlaf/)
-- Inspired by: [MyEnTunnel](https://web.archive.org/web/20161029055944/http://nemesis2.qx.net/pages/MyEnTunnel) and [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/)
+- SSH: [Apache Mina SSHD](https://github.com/apache/mina-sshd/)
+- GUI: [FlatLaf](https://www.formdev.com/flatlaf/)
+- Inspired by [MyEnTunnel](https://web.archive.org/web/20161029055944/http://nemesis2.qx.net/pages/MyEnTunnel) and [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/)
