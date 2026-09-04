@@ -21,14 +21,17 @@ import io.github.mjoe.burrow.core.ssh.TunnelManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
- * Main application window with tabbed interface.
+ * Main application window with tabbed interface and system tray integration.
  */
 public final class MainWindow extends JFrame implements TunnelListener {
     private final TunnelManager tunnelManager;
     private final JTabbedPane tabbedPane;
     private final StatusBar statusBar;
+    private TrayIcon trayIcon;
 
     public MainWindow(TunnelManager tunnelManager) {
         super("Burrow - SSH Tunnel Manager");
@@ -39,7 +42,7 @@ public final class MainWindow extends JFrame implements TunnelListener {
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
-                exitApplication();
+                minimizeToTray();
             }
         });
         setMinimumSize(new Dimension(800, 600));
@@ -67,6 +70,102 @@ public final class MainWindow extends JFrame implements TunnelListener {
 
         pack();
         setLocationRelativeTo(null);
+
+        // System tray
+        initSystemTray();
+    }
+
+    private void initSystemTray() {
+        if (!SystemTray.isSupported()) {
+            return;
+        }
+
+        var tray = SystemTray.getSystemTray();
+
+        // Tray popup menu
+        var popup = new PopupMenu();
+
+        var showItem = new MenuItem("Show Burrow");
+        showItem.addActionListener(e -> showFromTray());
+        popup.add(showItem);
+
+        popup.addSeparator();
+
+        var connectAllItem = new MenuItem("Connect All");
+        connectAllItem.addActionListener(e -> tunnelManager.connectAll());
+        popup.add(connectAllItem);
+
+        var disconnectAllItem = new MenuItem("Disconnect All");
+        disconnectAllItem.addActionListener(e -> tunnelManager.disconnectAll());
+        popup.add(disconnectAllItem);
+
+        popup.addSeparator();
+
+        var exitItem = new MenuItem("Exit");
+        exitItem.addActionListener(e -> exitApplication());
+        popup.add(exitItem);
+
+        // Tray icon
+        var trayImage = createTrayImage();
+        trayIcon = new TrayIcon(trayImage, "Burrow - SSH Tunnel Manager", popup);
+        trayIcon.setImageAutoSize(true);
+        trayIcon.setToolTip("Burrow - SSH Tunnel Manager");
+
+        // Double-click to show
+        trayIcon.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    showFromTray();
+                }
+            }
+        });
+
+        try {
+            tray.add(trayIcon);
+        } catch (AWTException e) {
+            // Tray not available
+        }
+    }
+
+    private Image createTrayImage() {
+        // Create a simple colored icon as tray image
+        var size = 16;
+        var image = new java.awt.image.BufferedImage(size, size, java.awt.image.BufferedImage.TYPE_INT_ARGB);
+        var g2d = image.createGraphics();
+        g2d.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // Green circle
+        g2d.setColor(new Color(0x4CAF50));
+        g2d.fillOval(1, 1, size - 2, size - 2);
+
+        // Letter "B"
+        g2d.setColor(Color.WHITE);
+        g2d.setFont(new Font("SansSerif", Font.BOLD, 10));
+        var fm = g2d.getFontMetrics();
+        var text = "B";
+        var x = (size - fm.stringWidth(text)) / 2;
+        var y = (size - fm.getHeight()) / 2 + fm.getAscent();
+        g2d.drawString(text, x, y);
+        g2d.dispose();
+
+        return image;
+    }
+
+    private void minimizeToTray() {
+        if (trayIcon != null) {
+            setVisible(false);
+            trayIcon.displayMessage("Burrow", "Minimized to system tray", TrayIcon.MessageType.INFO);
+        } else {
+            exitApplication();
+        }
+    }
+
+    private void showFromTray() {
+        setVisible(true);
+        setState(JFrame.NORMAL);
+        toFront();
+        requestFocus();
     }
 
     private JMenuBar createMenuBar() {
@@ -147,18 +246,26 @@ public final class MainWindow extends JFrame implements TunnelListener {
     }
 
     private void exitApplication() {
+        if (trayIcon != null) {
+            SystemTray.getSystemTray().remove(trayIcon);
+        }
         tunnelManager.shutdown();
         dispose();
         System.exit(0);
     }
 
     public void refreshData() {
-        // Refresh all panels
         for (var i = 0; i < tabbedPane.getTabCount(); i++) {
             var component = tabbedPane.getComponentAt(i);
             if (component instanceof Refreshable refreshable) {
                 refreshable.refresh();
             }
+        }
+    }
+
+    private void updateTrayTooltip(String text) {
+        if (trayIcon != null) {
+            trayIcon.setToolTip(text);
         }
     }
 
@@ -206,27 +313,42 @@ public final class MainWindow extends JFrame implements TunnelListener {
 
     @Override
     public void onConnecting(String connectionAlias) {
-        SwingUtilities.invokeLater(() -> statusBar.showMessage("Connecting to " + connectionAlias + "..."));
+        SwingUtilities.invokeLater(() -> {
+            statusBar.showMessage("Connecting to " + connectionAlias + "...");
+            updateTrayTooltip("Connecting to " + connectionAlias + "...");
+        });
     }
 
     @Override
     public void onConnected(String connectionAlias) {
-        SwingUtilities.invokeLater(() -> statusBar.showMessage("Connected to " + connectionAlias));
+        SwingUtilities.invokeLater(() -> {
+            statusBar.showMessage("Connected to " + connectionAlias);
+            updateTrayTooltip("Connected to " + connectionAlias);
+        });
     }
 
     @Override
     public void onDisconnected(String connectionAlias, String reason) {
-        SwingUtilities.invokeLater(() -> statusBar.showMessage("Disconnected from " + connectionAlias));
+        SwingUtilities.invokeLater(() -> {
+            statusBar.showMessage("Disconnected from " + connectionAlias);
+            updateTrayTooltip("Disconnected from " + connectionAlias);
+        });
     }
 
     @Override
     public void onFailed(String connectionAlias, String reason) {
-        SwingUtilities.invokeLater(() -> statusBar.showMessage("Failed to connect to " + connectionAlias + ": " + reason));
+        SwingUtilities.invokeLater(() -> {
+            statusBar.showMessage("Failed to connect to " + connectionAlias + ": " + reason);
+            updateTrayTooltip("Failed: " + connectionAlias);
+        });
     }
 
     @Override
     public void onReconnecting(String connectionAlias, int attempt) {
-        SwingUtilities.invokeLater(() -> statusBar.showMessage("Reconnecting to " + connectionAlias + " (attempt " + attempt + ")..."));
+        SwingUtilities.invokeLater(() -> {
+            statusBar.showMessage("Reconnecting to " + connectionAlias + " (attempt " + attempt + ")...");
+            updateTrayTooltip("Reconnecting to " + connectionAlias + "...");
+        });
     }
 
     @Override

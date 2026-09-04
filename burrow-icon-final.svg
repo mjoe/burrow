@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="512" y1="0" x2="512" y2="1024" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#202733"/>
+      <stop offset="1" stop-color="#0D121A"/>
+    </linearGradient>
+
+    <!-- The icon itself is the clipping boundary. Nothing can protrude. -->
+    <clipPath id="icon">
+      <rect width="1024" height="1024" rx="220"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="1024" rx="220" fill="url(#bg)"/>
+
+  <g clip-path="url(#icon)">
+    <!-- Exact centerline used for both colors.
+         One constant 64px stroke throughout. -->
+    <path
+      d="M -32,640
+         H 270
+         C 309,640 336,613 336,574
+         V 500
+         A 176,176 0 0 1 688,500
+         V 574
+         C 688,613 715,640 754,640
+         H 1056"
+      fill="none"
+      stroke="#54D9A3"
+      stroke-width="64"
+      stroke-linecap="butt"
+      stroke-linejoin="round"/>
+
+    <!-- White tunnel section follows the identical geometry.
+         Butt caps make the color boundary perfectly straight. -->
+    <path
+      d="M 336,574
+         V 500
+         A 176,176 0 0 1 688,500
+         V 574"
+      fill="none"
+      stroke="#F5F7FA"
+      stroke-width="64"
+      stroke-linecap="butt"
+      stroke-linejoin="round"/>
+
+    <!-- Terminal prompt: optically centered inside the opening. -->
+    <path
+      d="M 438,488 L 490,540 L 438,592"
+      fill="none"
+      stroke="#54D9A3"
+      stroke-width="32"
+      stroke-linecap="round"
+      stroke-linejoin="round"/>
+
+    <path
+      d="M 535,592 H 620"
+      fill="none"
+      stroke="#54D9A3"
+      stroke-width="32"
+      stroke-linecap="round"/>
+  </g>
+</svg>
