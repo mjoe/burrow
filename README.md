@@ -102,6 +102,11 @@ Burrow is a multi-module Maven project:
 - Core logic cleanly separated from the GUI layer
 - Secure credentials by default, never hardcoded keys
 
+## Contributing
+
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md)
+before submitting issues or pull requests.
+
 ## License
 
 [Apache License, Version 2.0](LICENSE)
