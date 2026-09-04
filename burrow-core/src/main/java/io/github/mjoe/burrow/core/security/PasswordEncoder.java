@@ -20,6 +20,8 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
+import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
@@ -43,7 +45,7 @@ public final class PasswordEncoder {
     /**
      * Generate a new random key for password encryption.
      */
-    public static SecretKey generateKey() throws Exception {
+    public static SecretKey generateKey() throws NoSuchAlgorithmException {
         var keyGen = KeyGenerator.getInstance("AES");
         keyGen.init(KEY_LENGTH, new SecureRandom());
         return keyGen.generateKey();
@@ -52,7 +54,7 @@ public final class PasswordEncoder {
     /**
      * Encrypt a password string.
      */
-    public String encrypt(String password) throws Exception {
+    public String encrypt(String password) throws GeneralSecurityException {
         if (password == null || password.isEmpty()) {
             return "";
         }
@@ -77,7 +79,7 @@ public final class PasswordEncoder {
     /**
      * Decrypt an encrypted password string.
      */
-    public String decrypt(String encryptedPassword) throws Exception {
+    public String decrypt(String encryptedPassword) throws GeneralSecurityException {
         if (encryptedPassword == null || encryptedPassword.isEmpty()) {
             return "";
         }

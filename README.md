@@ -15,12 +15,12 @@ A modern SSH tunnel management tool with a clean Swing GUI. Forked and redesigne
 - **Auto-Reconnect**: Automatic reconnection with exponential backoff
 - **Modern GUI**: Clean Swing interface with FlatLaf theming
 - **YAML Configuration**: Simple, human-readable configuration files
-- **Secure Password Storage**: AES-GCM encryption for stored credentials
+- **Secure Password Storage**: AES-GCM encryption with a persisted key file
 
 ## Requirements
 
-- Java 25 or later: [Download Eclipse Temurin](https://adoptium.net/)
-- Maven 3.9 or later (for building)
+- **Java 25 or later**: [Download Eclipse Temurin](https://adoptium.net/)
+- **Maven 3.9 or later** (for building)
 
 ## Building
 
@@ -33,12 +33,14 @@ cd burrow
 mvn clean package
 
 # Run the application
-java -jar burrow-gui/target/burrow-gui-2.0.0-SNAPSHOT.jar
+java -jar burrow-gui/target/burrow-gui-<version>.jar
 ```
 
 ## Configuration
 
-Burrow uses YAML configuration files. See `sample-config.yaml` for an example.
+By default, Burrow reads its configuration from `~/.burrow/config.yaml`. You can also load a config file via the GUI (`File → Load Configuration`).
+
+The SSH encryption key used for password storage is persisted at `~/.burrow/secret.key` with owner-only permissions. Do not share this file - without it, stored passwords cannot be decrypted.
 
 ### Configuration Structure
 
@@ -47,7 +49,7 @@ identities:
   - id: id-1
     alias: My Server
     username: admin
-    keyFile: ~/.ssh/id_ed25519
+    keyFile: /home/user/.ssh/id_ed25519
 
 connections:
   - id: conn-1
@@ -73,16 +75,16 @@ forwards:
 
 Burrow is organized as a multi-module Maven project:
 
-- **burrow-core**: Core library with SSH logic, configuration, and domain models
+- **burrow-core**: Core library with SSH logic, configuration, domain models, and security
 - **burrow-gui**: Swing GUI application
 
 ### Key Improvements Over jentunnel
 
-1. **Modern Java**: Uses Java 21 features (records, sealed classes, pattern matching)
+1. **Modern Java**: Uses Java 25 features (records, sealed classes, pattern matching)
 2. **Clean Architecture**: Separated core logic from GUI
 3. **Type-Safe Models**: Immutable records with builder pattern
 4. **Secure Credentials**: AES-GCM encryption instead of obfuscation
-5. **No Hardcoded Keys**: Encryption keys stored separately
+5. **Persisted Encryption Key**: Key stored in a separate owner-only file, never hardcoded
 6. **Comprehensive Tests**: Unit tests for core functionality
 7. **Modern Dependencies**: Up-to-date libraries (SSH, crypto, GUI)
 
@@ -90,7 +92,7 @@ Burrow is organized as a multi-module Maven project:
 
 ### Prerequisites
 
-- JDK 25+
+- JDK 25+ (Eclipse Temurin recommended)
 - Maven 3.9+
 
 ### Running Tests
