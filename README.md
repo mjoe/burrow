@@ -3,7 +3,7 @@
 SSH Tunnel Management - Made Easy
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-[![Java](https://img.shields.io/badge/java-25+-blue.svg)](https://jdk.java.net/)
+[![Java](https://img.shields.io/badge/java-25+-blue.svg)](https://adoptium.net/)
 [![Maven](https://img.shields.io/badge/maven-3.9+-green.svg)](https://maven.apache.org/)
 
 A modern SSH tunnel management tool with a clean Swing GUI. Forked and redesigned from [jentunnel](https://github.com/ggrandes/jentunnel).
@@ -19,7 +19,7 @@ A modern SSH tunnel management tool with a clean Swing GUI. Forked and redesigne
 
 ## Requirements
 
-- Java 25 or later: [Download JDK](https://jdk.java.net/)
+- Java 25 or later: [Download Eclipse Temurin](https://adoptium.net/)
 - Maven 3.9 or later (for building)
 
 ## Building
