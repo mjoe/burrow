@@ -102,22 +102,6 @@ Burrow is a multi-module Maven project:
 - Core logic cleanly separated from the GUI layer
 - Secure credentials by default, never hardcoded keys
 
-## Development
-
-### Run tests
-
-```bash
-./mvnw test
-```
-
-### IDE setup
-
-Import as a Maven project. Recommended:
-
-- [IntelliJ IDEA](https://www.jetbrains.com/idea/)
-- Eclipse with Maven plugin
-- [VS Code](https://code.visualstudio.com/) with Java extensions
-
 ## License
 
 [Apache License, Version 2.0](LICENSE)
