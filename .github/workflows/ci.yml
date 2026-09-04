@@ -30,7 +30,7 @@ jobs:
           cache: maven
 
       - name: Build & Test
-        run: mvn --batch-mode --no-transfer-progress verify
+        run: ./mvnw --batch-mode --no-transfer-progress verify
 
       - name: Upload test reports
         if: ${{ always() }}

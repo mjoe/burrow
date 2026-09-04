@@ -35,8 +35,8 @@ tunnels through an intuitive desktop interface.
 git clone https://github.com/mjoe/burrow.git
 cd burrow
 
-# 2. Build
-mvn clean package
+# 2. Build (uses Maven Wrapper - no manual Maven install needed)
+./mvnw clean package
 
 # 3. Run
 java -jar burrow-gui/target/burrow-gui-<version>.jar
@@ -45,7 +45,10 @@ java -jar burrow-gui/target/burrow-gui-<version>.jar
 ### Requirements
 
 - **Java 25+** — [Eclipse Temurin](https://adoptium.net/)
-- **Maven 3.9+** — [Apache Maven](https://maven.apache.org/download.cgi)
+
+The bundled [Maven Wrapper](https://maven.apache.org/wrapper/) (`./mvnw`)
+downloads the required Maven version automatically. You only need a system
+Maven if you prefer using `mvn` directly.
 
 ## Configuration
 
@@ -104,7 +107,7 @@ Burrow is a multi-module Maven project:
 ### Run tests
 
 ```bash
-mvn test
+./mvnw test
 ```
 
 ### IDE setup
