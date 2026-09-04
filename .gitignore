@@ -41,3 +41,4 @@ temp/
 *.orig
 dependency-reduced-pom.xml
 *.png
+*.svg
