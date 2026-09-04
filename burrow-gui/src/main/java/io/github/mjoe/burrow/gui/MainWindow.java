@@ -188,8 +188,7 @@ public final class MainWindow extends JFrame implements TunnelListener {
         JOptionPane.showMessageDialog(this,
                 "Burrow - SSH Tunnel Manager\n\n" +
                 "Version: " + getClass().getPackage().getImplementationVersion() + "\n\n" +
-                "A modern SSH tunnel management tool.\n" +
-                "Forked and redesigned from jentunnel.",
+                "A modern SSH tunnel management tool.",
                 "About Burrow",
                 JOptionPane.INFORMATION_MESSAGE);
     }

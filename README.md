@@ -2,7 +2,7 @@
 
 # Burrow
 
-**SSH Tunnel Management · Made Easy**
+**Modern SSH Tunnel Management**
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-informational.svg)](LICENSE)
 [![Java](https://img.shields.io/badge/java-25-blue.svg?logo=openjdk&logoColor=white)](https://adoptium.net/)

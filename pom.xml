@@ -26,7 +26,7 @@
     <packaging>pom</packaging>
 
     <name>Burrow</name>
-    <description>SSH Tunnel Management - Made Easy</description>
+    <description>A modern SSH tunnel management tool</description>
     <url>https://github.com/mjoe/burrow</url>
 
     <licenses>
