@@ -130,4 +130,3 @@ before submitting issues or pull requests.
 - Original project: [jentunnel](https://github.com/ggrandes/jentunnel) by ggrandes
 - SSH: [Apache Mina SSHD](https://github.com/apache/mina-sshd/)
 - GUI: [FlatLaf](https://www.formdev.com/flatlaf/)
-- Inspired by [MyEnTunnel](https://web.archive.org/web/20161029055944/http://nemesis2.qx.net/pages/MyEnTunnel) and [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/)
