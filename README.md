@@ -6,7 +6,7 @@
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-informational.svg)](LICENSE)
 [![Java](https://img.shields.io/badge/java-25-blue.svg?logo=openjdk&logoColor=white)](https://adoptium.net/)
-[![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
+[![Build](https://github.com/mjoe/burrow/actions/workflows/ci.yml/badge.svg)](https://github.com/mjoe/burrow/actions/workflows/ci.yml)
 
 A modern, secure SSH tunnel manager with a clean Swing GUI.
 
