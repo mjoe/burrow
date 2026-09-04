@@ -1,0 +1,46 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build & Release ${{ github.ref_name }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 25
+          cache: maven
+
+      - name: Normalize version (v1.0 -> 1.0)
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Set release version in POMs
+        run: |
+          ./mvnw --batch-mode --no-transfer-progress \
+            versions:set -DnewVersion=${{ steps.version.outputs.VERSION }} \
+            -DgenerateBackupPoms=false
+
+      - name: Build shaded jar
+        run: ./mvnw --batch-mode --no-transfer-progress -pl burrow-gui -am package -DskipTests
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Burrow ${{ steps.version.outputs.VERSION }}
+          files: burrow-gui/target/burrow-gui-${{ steps.version.outputs.VERSION }}.jar
+          generate_release_notes: true

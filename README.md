@@ -102,6 +102,20 @@ Burrow is a multi-module Maven project:
 - Core logic cleanly separated from the GUI layer
 - Secure credentials by default, never hardcoded keys
 
+## Releases
+
+Burrow uses **two-position** versioning (`Major.Minor`, e.g. `1.0`, `1.1`).
+Releases are published as [GitHub Releases](https://github.com/mjoe/burrow/releases)
+with a pre-built runnable fat-JAR.
+
+To cut a release, push a tag (the CI builds the jar and creates the release
+automatically):
+
+```bash
+git tag v1.0
+git push origin v1.0
+```
+
 ## Contributing
 
 Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md)
