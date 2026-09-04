@@ -1,0 +1,53 @@
+identities:
+  - id: id-1
+    alias: Personal Server
+    username: mjoe
+    keyFile: ~/.ssh/id_ed25519
+
+  - id: id-2
+    alias: Work VPN
+    username: admin
+    password: encrypted-password-here
+
+connections:
+  - id: conn-1
+    alias: Home Server
+    host: home.example.com
+    port: 22
+    identityId: id-1
+    autoStart: true
+    autoReconnect: true
+
+  - id: conn-2
+    alias: Work SSH
+    host: work.example.com
+    port: 22
+    identityId: id-2
+    autoStart: false
+    autoReconnect: true
+
+forwards:
+  - id: fwd-1
+    type: local
+    alias: Web App
+    connectionId: conn-1
+    localHost: 127.0.0.1
+    localPort: 8080
+    remoteHost: 127.0.0.1
+    remotePort: 80
+
+  - id: fwd-2
+    type: local
+    alias: Database
+    connectionId: conn-1
+    localHost: 127.0.0.1
+    localPort: 5432
+    remoteHost: db.internal
+    remotePort: 5432
+
+  - id: fwd-3
+    type: dynamic
+    alias: SOCKS Proxy
+    connectionId: conn-2
+    localHost: 127.0.0.1
+    localPort: 1080
