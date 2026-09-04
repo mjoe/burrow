@@ -21,7 +21,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: 25
+          java-version: 21
           cache: maven
 
       - name: Normalize version (v1.0 -> 1.0)

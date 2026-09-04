@@ -37,6 +37,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -55,6 +56,7 @@ public final class TunnelManager {
     private final Map<String, TunnelSession> sessions;
     private final Map<String, ConnectionStatus> statuses;
     private final AtomicInteger reconnectCounter;
+    private final AtomicBoolean shutdownFlag;
 
     private Configuration configuration;
     private Path configPath;
@@ -62,6 +64,7 @@ public final class TunnelManager {
     public TunnelManager() {
         this.configLoader = new ConfigurationLoader();
         this.reconnectCounter = new AtomicInteger(0);
+        this.shutdownFlag = new AtomicBoolean(false);
         this.scheduler = Executors.newScheduledThreadPool(4, r -> {
             var thread = new Thread(r, "burrow-scheduler-" + reconnectCounter.getAndIncrement());
             thread.setDaemon(true);
@@ -92,6 +95,99 @@ public final class TunnelManager {
 
     public Configuration getConfiguration() {
         return configuration;
+    }
+
+    public void addIdentity(Identity identity) {
+        configuration = Configuration.builder()
+                .identities(configuration.identities())
+                .identity(identity)
+                .connections(configuration.connections())
+                .forwards(configuration.forwards())
+                .build();
+    }
+
+    public void updateIdentity(Identity updated) {
+        var newIdentities = configuration.identities().stream()
+                .map(i -> i.id().value().equals(updated.id().value()) ? updated : i)
+                .toList();
+        configuration = Configuration.builder()
+                .identities(newIdentities)
+                .connections(configuration.connections())
+                .forwards(configuration.forwards())
+                .build();
+    }
+
+    public void removeIdentity(String id) {
+        var newIdentities = configuration.identities().stream()
+                .filter(i -> !i.id().value().equals(id))
+                .toList();
+        configuration = Configuration.builder()
+                .identities(newIdentities)
+                .connections(configuration.connections())
+                .forwards(configuration.forwards())
+                .build();
+    }
+
+    public void addConnection(Connection connection) {
+        configuration = Configuration.builder()
+                .identities(configuration.identities())
+                .connections(configuration.connections())
+                .connection(connection)
+                .forwards(configuration.forwards())
+                .build();
+    }
+
+    public void updateConnection(Connection updated) {
+        var newConnections = configuration.connections().stream()
+                .map(c -> c.id().value().equals(updated.id().value()) ? updated : c)
+                .toList();
+        configuration = Configuration.builder()
+                .identities(configuration.identities())
+                .connections(newConnections)
+                .forwards(configuration.forwards())
+                .build();
+    }
+
+    public void removeConnection(String id) {
+        var newConnections = configuration.connections().stream()
+                .filter(c -> !c.id().value().equals(id))
+                .toList();
+        configuration = Configuration.builder()
+                .identities(configuration.identities())
+                .connections(newConnections)
+                .forwards(configuration.forwards())
+                .build();
+    }
+
+    public void addForward(Forward forward) {
+        configuration = Configuration.builder()
+                .identities(configuration.identities())
+                .connections(configuration.connections())
+                .forwards(configuration.forwards())
+                .forward(forward)
+                .build();
+    }
+
+    public void updateForward(Forward updated) {
+        var newForwards = configuration.forwards().stream()
+                .map(f -> f.id().value().equals(updated.id().value()) ? updated : f)
+                .toList();
+        configuration = Configuration.builder()
+                .identities(configuration.identities())
+                .connections(configuration.connections())
+                .forwards(newForwards)
+                .build();
+    }
+
+    public void removeForward(String id) {
+        var newForwards = configuration.forwards().stream()
+                .filter(f -> !f.id().value().equals(id))
+                .toList();
+        configuration = Configuration.builder()
+                .identities(configuration.identities())
+                .connections(configuration.connections())
+                .forwards(newForwards)
+                .build();
     }
 
     public void saveConfiguration() throws IOException {
@@ -188,6 +284,9 @@ public final class TunnelManager {
     }
 
     public void shutdown() {
+        if (!shutdownFlag.compareAndSet(false, true)) {
+            return; // Already shut down
+        }
         log.info("Shutting down tunnel manager");
         disconnectAll();
         scheduler.shutdown();

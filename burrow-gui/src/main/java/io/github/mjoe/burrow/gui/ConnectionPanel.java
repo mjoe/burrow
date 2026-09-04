@@ -88,6 +88,7 @@ public final class ConnectionPanel extends JPanel implements Refreshable {
         dialog.setVisible(true);
 
         if (dialog.isAccepted()) {
+            tunnelManager.addConnection(dialog.getConnection());
             refresh();
         }
     }
@@ -104,6 +105,7 @@ public final class ConnectionPanel extends JPanel implements Refreshable {
         dialog.setVisible(true);
 
         if (dialog.isAccepted()) {
+            tunnelManager.updateConnection(dialog.getConnection());
             refresh();
         }
     }
@@ -122,6 +124,7 @@ public final class ConnectionPanel extends JPanel implements Refreshable {
                 JOptionPane.YES_NO_OPTION);
 
         if (result == JOptionPane.YES_OPTION) {
+            tunnelManager.removeConnection(connection.id().value());
             refresh();
         }
     }

@@ -99,10 +99,6 @@ public final class BurrowApp {
         });
 
         var app = new BurrowApp();
-
-        // Shutdown hook
-        Runtime.getRuntime().addShutdownHook(new Thread(app::shutdown, "shutdown-hook"));
-
         app.start();
     }
 }

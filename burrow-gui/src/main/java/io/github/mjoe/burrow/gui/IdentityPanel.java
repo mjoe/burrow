@@ -77,6 +77,7 @@ public final class IdentityPanel extends JPanel implements Refreshable {
         dialog.setVisible(true);
 
         if (dialog.isAccepted()) {
+            tunnelManager.addIdentity(dialog.getIdentity());
             refresh();
         }
     }
@@ -93,6 +94,7 @@ public final class IdentityPanel extends JPanel implements Refreshable {
         dialog.setVisible(true);
 
         if (dialog.isAccepted()) {
+            tunnelManager.updateIdentity(dialog.getIdentity());
             refresh();
         }
     }
@@ -111,6 +113,7 @@ public final class IdentityPanel extends JPanel implements Refreshable {
                 JOptionPane.YES_NO_OPTION);
 
         if (result == JOptionPane.YES_OPTION) {
+            tunnelManager.removeIdentity(identity.id().value());
             refresh();
         }
     }

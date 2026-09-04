@@ -77,6 +77,7 @@ public final class ForwardPanel extends JPanel implements Refreshable {
         dialog.setVisible(true);
 
         if (dialog.isAccepted()) {
+            tunnelManager.addForward(dialog.getForward());
             refresh();
         }
     }
@@ -93,6 +94,7 @@ public final class ForwardPanel extends JPanel implements Refreshable {
         dialog.setVisible(true);
 
         if (dialog.isAccepted()) {
+            tunnelManager.updateForward(dialog.getForward());
             refresh();
         }
     }
@@ -111,6 +113,7 @@ public final class ForwardPanel extends JPanel implements Refreshable {
                 JOptionPane.YES_NO_OPTION);
 
         if (result == JOptionPane.YES_OPTION) {
+            tunnelManager.removeForward(forward.id().value());
             refresh();
         }
     }

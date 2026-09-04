@@ -14,7 +14,7 @@ Burrow is a multi-module Maven project for SSH tunnel management (Swing GUI).
 - Always use the Maven Wrapper: `./mvnw` (never bare `mvn`).
 - Full build + tests: `./mvnw verify` (also runs the shade/fat-jar packaging).
 - Run only core tests: `./mvnw test -pl burrow-core`.
-- Java target is **25** (Eclipse Temurin). Do not downgrade.
+- Java target is **21** (Eclipse Temurin). Do not downgrade.
 
 ## Conventions
 

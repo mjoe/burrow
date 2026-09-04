@@ -5,7 +5,7 @@
 **Modern SSH Tunnel Management**
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-informational.svg)](LICENSE)
-[![Java](https://img.shields.io/badge/java-25-blue.svg?logo=openjdk&logoColor=white)](https://adoptium.net/)
+[![Java](https://img.shields.io/badge/java-21+-blue.svg?logo=openjdk&logoColor=white)](https://adoptium.net/)
 [![Build](https://github.com/mjoe/burrow/actions/workflows/ci.yml/badge.svg)](https://github.com/mjoe/burrow/actions/workflows/ci.yml)
 
 A modern, secure SSH tunnel manager with a clean Swing GUI.
@@ -39,12 +39,13 @@ cd burrow
 ./mvnw clean package
 
 # 3. Run
-java -jar burrow-gui/target/burrow-gui-<version>.jar
+./burrow.sh          # macOS / Linux
+burrow.bat           # Windows
 ```
 
 ### Requirements
 
-- **Java 25+** — [Eclipse Temurin](https://adoptium.net/)
+- **Java 21+** — [Eclipse Temurin](https://adoptium.net/)
 
 The bundled [Maven Wrapper](https://maven.apache.org/wrapper/) (`./mvnw`)
 downloads the required Maven version automatically. You only need a system

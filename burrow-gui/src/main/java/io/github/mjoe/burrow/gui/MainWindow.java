@@ -35,7 +35,13 @@ public final class MainWindow extends JFrame implements TunnelListener {
         this.tunnelManager = tunnelManager;
         this.tunnelManager.addListener(this);
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                exitApplication();
+            }
+        });
         setMinimumSize(new Dimension(800, 600));
         setPreferredSize(new Dimension(1000, 700));
 
@@ -84,10 +90,7 @@ public final class MainWindow extends JFrame implements TunnelListener {
 
         var exitItem = new JMenuItem("Exit");
         exitItem.setAccelerator(KeyStroke.getKeyStroke("meta Q"));
-        exitItem.addActionListener(e -> {
-            tunnelManager.shutdown();
-            System.exit(0);
-        });
+        exitItem.addActionListener(e -> exitApplication());
         fileMenu.add(exitItem);
 
         menuBar.add(fileMenu);
@@ -141,6 +144,12 @@ public final class MainWindow extends JFrame implements TunnelListener {
         button.addActionListener(action);
         button.setFocusPainted(false);
         return button;
+    }
+
+    private void exitApplication() {
+        tunnelManager.shutdown();
+        dispose();
+        System.exit(0);
     }
 
     public void refreshData() {
